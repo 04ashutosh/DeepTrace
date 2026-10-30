@@ -1,0 +1,29 @@
+services:
+  deeptrace-postgres:
+    image: postgres:16-alpine
+    container_name: deeptrace-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: deeptrace
+      POSTGRES_USER: deeptrace_user
+      POSTGRES_PASSWORD: deeptrace_password
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - deeptrace_pgdata:/var/lib/postgresql/data
+      - ./sql/01_metadata_schema.sql:/docker-entrypoint-initdb.d/01_metadata_schema.sql:ro
+      - ./sql/02_lakehouse_tables.sql:/docker-entrypoint-initdb.d/02_lakehouse_tables.sql:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deeptrace_user -d deeptrace"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  deeptrace_pgdata:
+    driver: local

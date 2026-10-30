@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+workers/.venv/
+.pytest_cache/
+
+# Java / Maven
+target/
+*.class
+.mvn/
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Data & Environment
+data/landing/*
+!data/landing/.gitkeep
+data/quarantine/*
+!data/quarantine/.gitkeep
+data/archive/*
+!data/archive/.gitkeep
+.env
