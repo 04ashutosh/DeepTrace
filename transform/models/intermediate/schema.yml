@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_service_traffic_flow
+    description: "Intermediate model calculating service request sequences and lag latencies"
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null

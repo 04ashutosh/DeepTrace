@@ -14,6 +14,12 @@ target/
 *.jar
 *.war
 
+# dbt
+transform/target/
+transform/dbt_packages/
+transform/logs/
+transform/.user.yml
+
 # IDE
 .idea/
 .vscode/

@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: dim_services
+    description: "Dimension table cataloging services, total observed traffic, and latency baselines"
+    columns:
+      - name: service_name
+        tests:
+          - unique
+          - not_null
+      - name: total_lifetime_requests
+        tests:
+          - not_null
+
+  - name: mart_service_health
+    description: "Curated 5-minute tumbling window metrics: p50/p95/p99 latency, error rates"
+    columns:
+      - name: window_id
+        description: "Composite surrogate key: service_name + window_start"
+        tests:
+          - unique
+          - not_null
+      - name: service_name
+        tests:
+          - not_null
+      - name: error_rate_5xx_pct
+        tests:
+          - not_null
+
+  - name: mart_pipeline_performance
+    description: "Aggregated performance and data quality summary by pipeline"
+    columns:
+      - name: pipeline_id
+        tests:
+          - not_null

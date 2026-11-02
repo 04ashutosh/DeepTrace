@@ -1,0 +1,59 @@
+version: 2
+
+sources:
+  - name: deeptrace_lakehouse
+    database: deeptrace
+    schema: public
+    tables:
+      - name: silver_http_events
+        description: "Validated and typed HTTP request telemetry from the Python streaming ingestor"
+        columns:
+          - name: event_id
+            description: "Unique UUID for each HTTP event"
+            tests:
+              - unique
+              - not_null
+          - name: service_name
+            tests:
+              - not_null
+          - name: status_code
+            tests:
+              - not_null
+          - name: latency_ms
+            tests:
+              - not_null
+
+      - name: pipeline_runs
+        description: "Execution audit records from ingestion runs"
+        columns:
+          - name: run_uuid
+            tests:
+              - unique
+              - not_null
+          - name: status
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: ['PENDING', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED']
+
+models:
+  - name: stg_http_events
+    description: "Staging model for HTTP events: deduplicated, cleaned, and categorized"
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null
+      - name: http_status_class
+        description: "Classified HTTP status (2xx, 3xx, 4xx, 5xx)"
+        tests:
+          - not_null
+
+  - name: stg_pipeline_runs
+    description: "Staging model for pipeline executions with normalized timing and rejection rate"
+    columns:
+      - name: run_uuid
+        tests:
+          - unique
+          - not_null
