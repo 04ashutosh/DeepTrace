@@ -33,4 +33,10 @@ data/quarantine/*
 !data/quarantine/.gitkeep
 data/archive/*
 !data/archive/.gitkeep
+data/lakehouse/*
+!data/lakehouse/.gitkeep
+*.parquet
+*.parquet.crc
+_SUCCESS
+._SUCCESS.crc
 .env
