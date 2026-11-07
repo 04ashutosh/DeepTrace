@@ -39,3 +39,7 @@ def get_spark_session(config: SparkConfig = None) -> SparkSession:
     )
     
     return builder.getOrCreate()
+
+def create_spark_session(app_name: str = None) -> SparkSession:
+    cfg = SparkConfig(app_name=app_name) if app_name else SparkConfig()
+    return get_spark_session(cfg)

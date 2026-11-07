@@ -19,3 +19,5 @@ HTTP_EVENT_SPARK_SCHEMA = StructType([
     StructField("user_agent", StringType(), True),
     StructField("timestamp", StringType(), False)
 ])
+
+HTTP_EVENT_SCHEMA = HTTP_EVENT_SPARK_SCHEMA
