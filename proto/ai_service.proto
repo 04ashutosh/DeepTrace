@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package io.deeptrace.grpc;
+
+option java_multiple_files = true;
+option java_package = "io.deeptrace.grpc";
+option java_outer_classname = "AiServiceProto";
+
+// Service contract between Java Control Plane and Python AI Engine
+service AiInvestigationService {
+    // Server streaming RPC: streams reasoning steps as the AI investigates
+    rpc Investigate (InvestigationRequest) returns (stream InvestigationStepResponse);
+
+    // Unary RPC: semantic search over incident runbooks
+    rpc SearchRunbooks (RunbookSearchRequest) returns (RunbookSearchResponse);
+
+    // Health check
+    rpc CheckHealth (HealthRequest) returns (HealthResponse);
+}
+
+message InvestigationRequest {
+    string incident_id = 1;
+    string trace_id = 2;
+    string service_name = 3;
+    string error_message = 4;
+}
+
+enum StepType {
+    STEP_TYPE_UNSPECIFIED = 0;
+    THOUGHT = 1;
+    ACTION = 2;
+    OBSERVATION = 3;
+    CONCLUSION = 4;
+}
+
+message InvestigationStepResponse {
+    string incident_id = 1;
+    StepType step_type = 2;
+    string content = 3;
+    string tool_name = 4;
+    string tool_input_json = 5;
+    string tool_output_json = 6;
+    int64 timestamp_epoch_ms = 7;
+}
+
+message RunbookSearchRequest {
+    string query = 1;
+    int32 top_k = 2;
+}
+
+message RunbookChunk {
+    string title = 1;
+    string service_name = 2;
+    string content = 3;
+    double similarity_score = 4;
+}
+
+message RunbookSearchResponse {
+    repeated RunbookChunk chunks = 1;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+    string status = 1;
+    string version = 2;
+}
